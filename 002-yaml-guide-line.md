@@ -1,4 +1,4 @@
-Spring boot: YAML 属性配置文件详解
+## Spring boot: YAML 属性配置文件详解
 
 This page source from [深入Spring Boot (四)：YAML属性配置文件使用详解](https://mp.weixin.qq.com/s/zzNo5tTR9OIhcYi8-x-kog)
 
