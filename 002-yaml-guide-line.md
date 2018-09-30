@@ -2,7 +2,7 @@ Spring boot: YAML 属性配置文件详解
 
 This page source from [深入Spring Boot (四)：YAML属性配置文件使用详解](https://mp.weixin.qq.com/s/zzNo5tTR9OIhcYi8-x-kog)
 
-Please refer to the sample project [spring-boot-configuration-yaml](spring-boot-common/spring-boot-configuration-yaml)
+源代码请参考：[spring-boot-configuration-yaml](spring-boot-common/spring-boot-configuration-yaml)
 
 Spring Boot弱化配置的特性让属性配置文件的使用也更加便捷，它默认支持对application.properties
 或application.yml属性配置文件处理，即在application.properties或application.yml文件中添加属性配置，
@@ -34,8 +34,44 @@ server:
         name: app
     address: 192.168.1.1
 ```
+yml和xml相比，少了一些结构化的代码，使数据更直接，一目了然。
+yml和json呢？没有谁好谁坏，合适才是最好的。yml的语法比json优雅，注释更标准，适合做配置文件。json作为一种机器交换格式比yml强，更适合做api调用的数据交换。
 
-### 2.基础使用
+### 2. YAML语法
+以空格的缩进程度来控制层级关系。空格的个数并不重要，只要左边空格对齐则视为同一个层级。注意不能用tab代替空格。且大小写敏感。支持字面值，对象，数组三种数据结构，也支持复合结构。
+
+**字面值**：字符串，布尔类型，数值，日期。字符串默认不加引号，单引号会转义特殊字符。日期格式支持yyyy/MM/dd HH:mm:ss
+
+**对象**：由键值对组成，形如 key:(空格)value 的数据组成。冒号后面的空格是必须要有的，每组键值对占用一行，且缩进的程度要一致，也可以使用行内写法：{k1: v1, ....kn: vn}
+
+**数组**：由形如 -(空格)value 的数据组成。短横线后面的空格是必须要有的，每组数据占用一行，且缩进的程度要一致，也可以使用行内写法： [1,2,...n]
+
+**复合结构**：上面三种数据结构任意组合.
+
+一个Spring Boot 的全局配置文件 application.yml，配置属性参数。主要有字符串，带特殊字符的字符串，布尔类型，数值，集合，行内集合，行内对象，集合对象这几种常用的数据格式。
+```yaml
+yaml:
+  str: 字符串可以不加引号
+  specialStr: "双引号直接输出\n特殊字符"
+  specialStr2: '单引号可以转义\n特殊字符'
+  flag: false
+  num: 666
+  Dnum: 88.88
+  list:
+    - one
+    - two
+    - two
+  set: [1,2,2,3]
+  map: {k1: v1, k2: v2}
+  positions:
+    - name: ITDragon
+      salary: 15000.00
+    - name: ITDragonBlog
+      salary: 18888.88
+```
+
+### 3.在spring boot 中使用YAML
+
 使用Spring Boot 2.0对上面的application.yml属性配置文件进行属性注入，对应的build.gradle文件内容如下：
 ```groovy
 plugins {
@@ -216,3 +252,21 @@ spring:
 ![yaml-file-priority](resources/spring-boot-common/yaml/yaml-file-priority.PNG)
 
 若这四个位置都存在application.yml文件，属性值的覆盖顺序是：1>2>3>4，例如四个位置的application.yml文件都配置了db.name属性，最终生效的是当前目录下的/config子目录application.yml文件中的属性值；如果四个位置的application.yml文件，只有classpath下的/config包application.yml文件配置了db.name，最终生效的就是这个位置下的属性值。
+
+### 7.指定激活指定的配置文件profile
+
+- 可以在系统变量里面设置`spring.profiles.active=local`
+```shell
+$ java -jar -Dspring.profiles.active=production demo-0.0.1-SNAPSHOT.jar
+```
+- 可以在操作系统环境变量里面设置`SPRING_PROFILES_ACTIVE=dev`
+``shell
+set SPRING_PROFILES_ACTIVE=dev
+``
+- 当然也可以在**application.yml**里面指定
+```yaml
+spring:
+  profiles:
+    active: local
+```
+

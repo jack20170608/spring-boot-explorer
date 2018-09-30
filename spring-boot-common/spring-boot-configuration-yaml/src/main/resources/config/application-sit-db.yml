@@ -1,0 +1,5 @@
+spring:
+  prifiles: sit-db
+### just a sample property
+dataSource:
+  url: mysql:127.0.0.1:1121 (SIT)

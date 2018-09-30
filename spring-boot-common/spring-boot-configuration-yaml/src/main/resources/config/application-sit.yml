@@ -1,0 +1,4 @@
+spring:
+  profiles:
+    include: db,sit-db
+welcomeMsg: Hello, Welcome to jack's home page (sit)

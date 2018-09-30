@@ -1,0 +1,5 @@
+spring:
+  profiles: local-db
+### just a sample property
+dataSource:
+  url: h2~/test:127.0.0.1:1121

@@ -1,0 +1,22 @@
+### default enable the local profile to true
+server:
+  port: 8888
+spring:
+  profiles:
+    active: local
+
+welcomeMsg: Hello, Welcome to jack's home page (default)
+me:
+  name: jack
+  title: software developer
+  email: 275287908@qq.com
+  mobile: +0(86)13600097865
+  address:
+    - GuangZhou Panyu district QiFu New Town C26
+    - GuangZhou Tianhe district TaiKoo 14 Floor
+  selfIntruduction: I love my family, love coding
+
+dataSource:
+  userName: default
+  url: default
+  password: default

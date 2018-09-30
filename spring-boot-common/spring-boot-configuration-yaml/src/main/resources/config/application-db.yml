@@ -1,0 +1,6 @@
+spring:
+  profiles: db
+### some dummy database connection string
+dataSource:
+  userName: jack
+  password: 123

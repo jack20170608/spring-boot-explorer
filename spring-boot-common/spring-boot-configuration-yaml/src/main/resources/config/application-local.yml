@@ -1,0 +1,4 @@
+spring:
+  profiles:
+    include: db,local-db
+welcomeMsg: Hello, Welcome to jack's home page (local)
