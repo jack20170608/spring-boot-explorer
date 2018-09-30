@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
+//take care about the prefix, should seperate with "-"
 @ConfigurationProperties(prefix = "data-source")
 public class DBConnectionFactory {
 
