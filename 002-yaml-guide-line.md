@@ -30,11 +30,8 @@ Spring Boot对SnakeYAML库也做了集成，例如使用spring-boot-starter-web�
 下面是一个简单的application.yml属性配置文件。
 ```yaml
 server:
-
     display:
-
         name: app
-
     address: 192.168.1.1
 ```
 
@@ -42,41 +39,26 @@ server:
 使用Spring Boot 2.0对上面的application.yml属性配置文件进行属性注入，对应的build.gradle文件内容如下：
 ```groovy
 plugins {
-
     id 'java'
-
 }
-
 group 'spring-boot'
-
 version '1.0-SNAPSHOT'
-
 sourceCompatibility = 1.8
-
 repositories {
-
     jcenter()
-
 }
 
 dependencies {
-
     compile("org.springframework.boot:spring-boot-starter:2.0.0.RELEASE")
-
     testCompile("org.springframework.boot:spring-boot-starter-test:2.0.0.RELEASE")
-
 }
 ```
 编写启动类Application.java，具体代码如下：
 ```java
 @SpringBootApplication
-
 public class Application {
-
     public static void main(String[] args) {
-
         SpringApplication.run(Application.class, args);
-
     }
 
 }
@@ -84,41 +66,26 @@ public class Application {
 编写要进行属性注入的bean，具体代码如下：
 ```java
 @Component
-
 public class Properties {
-
     @Value("${server.display.name}")
-
     private String serverDisplayName;
-
     @Value("${server.address}")
-
     private String serverAddress;
-
     //省略getter和setter
-
 }
 ```
 编写单元测试类PropertiesTest.java，具体代码如下：
 ```java
 @RunWith(SpringRunner.class)
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-
 public class PropertiesTest {
 
     @Autowired
-
     private Properties properties;
-
     @Test
-
     public void test() {
-
         System.out.println("server display name:" + properties.getServerDisplayName());
-
         System.out.println("server address:" + properties.getServerAddress());
-
     }
 
 }
@@ -141,13 +108,9 @@ server address:127.0.0.1
 application.yml中有如下属性配置：
 ```yaml
 server:
-
     name: app
-
     address:
-
         - 192.168.1.1
-
         - 192.168.1.2
 ```
 这个属性配置中配置了一个address列表，可以使用@ConfigurationProperties注解进行属性注入，具体代码如下：
@@ -157,36 +120,23 @@ server:
 @ConfigurationProperties(prefix = "server")
 
 public class Properties {
-
     private String name;
-
     private List<String> address = new ArrayList<>();
-
     //省略getter和setter
-
 }
 ```
 列表元素在进行属性值注入的时候可以使用List或Set存储。
 Spring Boot还支持复杂类型的列表元素，例如如下属性值配置：
 ```yaml
 server:
-
     list:
-
       - name: app-1
-
         address:
-
             - 10.11.1.1
-
             - 10.11.1.2
-
       - name: app-2
-
         address:
-
             - 10.10.1.1
-
             - 10.10.1.2
 ```
 上面配置了一个列表元素list，它包含了两个具体元素，在进行属性值注入的时需要编写如下bean：
@@ -196,19 +146,14 @@ server:
 @ConfigurationProperties(prefix = "server")
 
 public class Properties {
-
     private List<Server> list = new ArrayList<>();
-
     //省略getter和setter
 
 }
 
 public class Server {
-
     private String name;
-
     private List<String> address = new ArrayList<>();
-
     //省略getter和setter
 
 }
@@ -217,51 +162,32 @@ public class Server {
 像Properties配置文件一样，YAML配置文件也支持多环境切换，例如如下属性配置代码：
 ```yaml
 server:
-
     name: app
-
     address:
-
         - 192.168.1.1
-
         - 192.168.1.2
 
 spring:
-
   profiles:
-
     active: test
-
 ---
 
 spring:
-
     profiles: dev
-
 server:
-
     name: app-dev
-
     address:
-
         - 10.10.1.1
-
         - 10.10.1.2
 
 ---
 
 spring:
-
     profiles: test
-
 server:
-
     name: app-test
-
     address:
-
         - 192.100.1.1
-
         - 192.100.1.2
 
 ---
@@ -273,9 +199,7 @@ server:
 项目的属性配置文件比较多的时候，会把它们按用途分为多个配置文件，例如application-db.yml、application-mq.yml等，Spring Boot也支持对这些文件的加载，除了使用spring.config.location实现，还可以在application.yml中添加spring.profiles.include属性实现，属性值有多个的使用逗号分隔，例如额外加载application-db.yml和application-mq.yml配置如下：
 ```yaml
 spring:
-
   profiles:
-
     include: db,mq
 ```
 
