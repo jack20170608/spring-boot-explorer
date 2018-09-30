@@ -196,3 +196,70 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 In the `SwaggerConfig` class, we have added a `metaData()` method that returns and ApiInfo object initialized with information about our API. Line 23 initializes the `Docket` with the new information.
 
 The Swagger 2 generated documentation, now look more details.
+
+### Swagger 2 Annotations for REST Endpoints
+At this point, if you click the product-controller link, Swagger-UI will display the documentation of our operation endpoints, like this.
+![Product-Controller](resources/spring-boot-restApi/swagger/RestApi-productController.PNG)
+
+For each of our operation endpoint, we can use the @ApiOperation annotation to describe the endpoint and its response type, like this:
+We can use the @Api annotation on our ProductController class to describe our API.
+```java
+@RestController
+@RequestMapping("/product")
+@Api(value="onlinestore", description="Operations pertaining to products in Online Store")
+public class ProductController {
+.  . . .
+}
+```
+
+The Swagger-UI generated documentation will reflect the description, and now looks like this.
+![Product-Controller-with-description](resources/spring-boot-restApi/swagger/RestApi-productController-desc.PNG)
+
+Swagger 2 also allows overriding the default response messages of HTTP methods. You can use the @ApiResponse annotation to document other responses, in addition to the regular HTTP 200 OK, like this.
+
+```java
+@ApiOperation(value = "View a list of available products", response = Iterable.class)
+@ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully retrieved list"),
+        @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+        @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+        @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+}
+)
+@RequestMapping(value = "/list", method= RequestMethod.GET, produces = "application/json")
+public Iterable list(Model model){
+    Iterable productList = productService.listAllProducts();
+    return productList;
+}
+```
+One undocumented thing that took quite some of my time was related to the value of Response Content Type. Swagger 2 generated "*/*", while I was expecting "application/json" for Response Content Type. It was only after updating the @RequestMapping annotation with produces = "application/json" that the desired value got generated. The annotated ProductController is this.
+
+### Swagger 2 Annotations for Model
+You can use the `@ApiModelProperty` annotation to describe the properties of the `Product` model. With `@ApiModelProperty`, you can also document a property as required.
+
+The code of our `Product` class is this.
+```java
+public class Product {
+
+    @ApiModelProperty(notes = "The database generated product ID")
+    private Integer id;
+    @ApiModelProperty(notes = "The auto-generated version of the product")
+    private Integer version;
+    @ApiModelProperty(notes = "The application-specific product ID")
+    private String productId;
+    @ApiModelProperty(notes = "The product description")
+    private String description;
+    @ApiModelProperty(notes = "The image URL of the product")
+    private String imageUrl;
+    @ApiModelProperty(notes = "The price of the product", required = true)
+    private BigDecimal price;
+  }
+```
+The Swagger 2 generated documentation for Product is this.
+![Product model](resources/spring-boot-restApi/swagger/product-model.PNG)
+
+### Summary
+
+Beside REST API documentation and presentation with Swagger Core and Swagger UI, Swagger 2 has a whole lot of other uses too that is beyond the scope of this post. One of my favorite is Swagger Editor, a tool to design new APIs or edit existing ones. The editor visually renders your Swagger definition and provides real time error-feedback. Another one is Swagger Codegen – a code generation framework for building Client SDKs, servers, and documentation from Swagger definitions.
+
+Swagger 2 also supports Swagger definition through JSON and YAML files. It is something you should try if you want to avoid implementation-specific code in your codebase by externalizing them in JSON and YAML files – something that I will cover in a future post.
