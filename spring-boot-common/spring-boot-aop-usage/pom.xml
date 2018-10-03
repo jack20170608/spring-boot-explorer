@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>spring-boot-aop-logging</module>
+        <module>spring-boot-aop-caching</module>
     </modules>
 
     <artifactId>spring-boot-aop-usage</artifactId>
