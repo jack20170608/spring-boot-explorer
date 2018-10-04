@@ -53,5 +53,4 @@ public class SimpleCacheAdvice {
 
         return result;
     }
-
 }

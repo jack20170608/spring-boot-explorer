@@ -10,3 +10,5 @@ Including the best practice of spring boot.
 - [022 Spring boot aop logger usage guideline](022-Spring-aop-logger-usage.md)
 - [023 Spring boot aop caching usage guideline](023-spring-aop-cache-usage.md) --TODO
 - [030 Spring boot: Restful Api Swagger2 documentation](030-Restful-API-documentation-with-swagger2.md)
+
+- [060-spring-caching-explorer](060-spring-caching-explorer.md)
