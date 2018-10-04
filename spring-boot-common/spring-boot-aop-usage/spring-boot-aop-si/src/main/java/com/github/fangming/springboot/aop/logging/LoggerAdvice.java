@@ -1,4 +1,4 @@
-package com.github.fangming.springboot.aop;
+package com.github.fangming.springboot.aop.logging;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.aspectj.lang.JoinPoint;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Component
 public class LoggerAdvice {
 
-    ThreadLocal<Long> startTime = new ThreadLocal<>();
+    private ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     //Should use the target class instead of the aspect class
     private Logger getAcrualLogger(Class targetClass){

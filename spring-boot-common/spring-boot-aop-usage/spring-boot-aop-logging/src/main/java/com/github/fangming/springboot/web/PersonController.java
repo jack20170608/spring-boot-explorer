@@ -1,6 +1,6 @@
 package com.github.fangming.springboot.web;
 
-import com.github.fangming.springboot.aop.LoggerManager;
+import com.github.fangming.springboot.aop.logging.LoggerManager;
 import com.github.fangming.springboot.model.Person;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

@@ -11,5 +11,12 @@
 
     <artifactId>spring-boot-aop-caching</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.github.fangming.springboot</groupId>
+            <artifactId>spring-boot-aop-si</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

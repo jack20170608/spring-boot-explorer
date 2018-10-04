@@ -1,4 +1,4 @@
-package com.github.fangming.springboot.aop;
+package com.github.fangming.springboot.aop.logging;
 
 import java.lang.annotation.*;
 

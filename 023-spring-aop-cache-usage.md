@@ -10,3 +10,8 @@
 
 [Practical caching with Spring AOP](https://mycenes.wordpress.com/2010/08/17/practical-caching-with-spring-aop/)
 
+[学习笔记：cache 和spring cache 技术2--spring cache 的基本使用 、spring-Redis集成](https://juejin.im/post/5a296cb36fb9a0450f21d736)
+
+[Spring cache简单使用guava cache](https://cloud.tencent.com/developer/article/1058752)
+
+[Spring Boot+Guava Cache+@EnableCaching](https://blog.csdn.net/u011726984/article/details/79013055)
