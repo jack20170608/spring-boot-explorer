@@ -13,3 +13,5 @@
 [Spring cache简单使用guava cache](https://cloud.tencent.com/developer/article/1058752)
 
 [Spring Boot+Guava Cache+@EnableCaching](https://blog.csdn.net/u011726984/article/details/79013055)
+
+[[Google Guava] 3-缓存](http://ifeve.com/google-guava-cachesexplained/)
