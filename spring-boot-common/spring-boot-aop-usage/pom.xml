@@ -13,6 +13,7 @@
         <module>spring-boot-aop-logging</module>
         <module>spring-boot-aop-caching</module>
         <module>spring-boot-aop-si</module>
+        <module>spring-boot-aop-retry</module>
     </modules>
 
     <artifactId>spring-boot-aop-usage</artifactId>
