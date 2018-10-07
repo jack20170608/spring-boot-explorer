@@ -7,10 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Aspect
 @Component
@@ -21,7 +18,7 @@ public class SimpleRetryAdvice {
 
     private Logger logger = LoggerFactory.getLogger(SimpleRetryAdvice.class);
 
-    @Around(value = "within(com.github.fangming.springboot..*) && @annotation(simpleJackRetryDot)")
+    @Around(value = "within(com.github.fangming.springboot..*) && @annotation(simpleRetryDot)")
     public Object executeRetry(ProceedingJoinPoint proceedingJoinPoint, SimpleRetryDot simpleRetryDot) throws Throwable {
         logger.info("Execute retry method with times [{}], sleep time [{}], async [{}].", simpleRetryDot.count(), simpleRetryDot.sleep(), simpleRetryDot.asyn());
         AbstractRetryTemplate retryTemplate = new AbstractRetryTemplate() {
@@ -31,7 +28,7 @@ public class SimpleRetryAdvice {
             }
         }.setRetryTime(simpleRetryDot.count()).setSleepTime(simpleRetryDot.sleep());
         if (simpleRetryDot.asyn()){
-            return retryTemplate.submit(executorService);
+            return ((Future)retryTemplate.submit(executorService)).get();
         }else {
             return retryTemplate.execute();
         }
