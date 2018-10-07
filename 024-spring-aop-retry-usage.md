@@ -170,7 +170,6 @@ public class MethodRetryHandlerAspect {
 
 
 Reference: 
-[java retry(重试) spring retry, guava retrying 详解](https://juejin.im/post/5b6ac0a06fb9a04f8a21b192)
-[Java实现几种简单的重试机制](https://my.oschina.net/u/566591/blog/1526551)
-
-[Retrying Method Execution using Spring AOP](https://sivalabs.in/2016/01/retrying-method-execution-using-spring-aop/)
+- [java retry(重试) spring retry, guava retrying 详解](https://juejin.im/post/5b6ac0a06fb9a04f8a21b192)
+- [Java实现几种简单的重试机制](https://my.oschina.net/u/566591/blog/1526551)
+- [Retrying Method Execution using Spring AOP](https://sivalabs.in/2016/01/retrying-method-execution-using-spring-aop/)
