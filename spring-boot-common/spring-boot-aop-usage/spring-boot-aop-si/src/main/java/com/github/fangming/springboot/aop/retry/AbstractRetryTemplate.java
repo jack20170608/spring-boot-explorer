@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 public abstract class AbstractRetryTemplate {
 
@@ -67,7 +68,7 @@ public abstract class AbstractRetryTemplate {
         throw new RuntimeException("Retry timeout....");
     }
 
-    public Object submit(ExecutorService executorService) throws Throwable{
+    public Future<Object> submit(ExecutorService executorService) throws Throwable{
         return executorService.submit((Callable<Object>) () -> {
             try {
                 return execute();
