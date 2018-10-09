@@ -50,7 +50,7 @@ public class SimpleH2DbApp implements CommandLineRunner {
                 statement.close();
             }
         }
-        System.out.println("Created table in given database...");
+        logger.info("Created table in given database...");
     };
 
     static ThrowingConsumer<Connection, Exception> insertData = (Connection connection) -> {
@@ -75,7 +75,7 @@ public class SimpleH2DbApp implements CommandLineRunner {
                 statement.close();
             }
         }
-        System.out.println("inserted data to table in given database...");
+        logger.info("inserted data to table in given database...");
     };
 
 
