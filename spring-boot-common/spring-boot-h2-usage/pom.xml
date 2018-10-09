@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>spring-boot-h2-simple</module>
+        <module>spring-boot-spring-jdbc-h2</module>
     </modules>
 
     <dependencies>

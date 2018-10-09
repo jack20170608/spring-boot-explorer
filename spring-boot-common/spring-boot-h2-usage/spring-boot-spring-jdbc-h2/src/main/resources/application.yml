@@ -1,0 +1,17 @@
+server:
+  port: 8888
+spring:
+    h2:
+      ## web console address: http://localhost:8888/h2-console
+      ## JDBC URL : jdbc:h2:mem:testdb;MODE=MYSQL; take care the same name with the spring.datasource.url
+      ## Once login use the schema.tablename to query
+      ## like select * from jack.student;
+      console: true
+      settings:
+        web-allow-others: true
+    datasource:
+      driver-class-name: org.h2.Driver
+      username: jack
+      password:
+      ### url: jdbc:h2:mem:jackDB;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS JACK\;CREATE USER IF NOT EXISTS jack PASSWORD ''\;SET SCHEMA JACK;
+      url: jdbc:h2:mem:jackDB;MODE=MYSQL;INIT=RUNSCRIPT FROM 'classpath:db/init_db.sql';DB_CLOSE_DELAY=-1;
