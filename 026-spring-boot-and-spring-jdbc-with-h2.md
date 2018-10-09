@@ -116,5 +116,5 @@ The Rest api result from chromw:
 
 
 ##### Reference 
-[Integrating Spring Boot and Spring JDBC with H2 and Starter JDBC](http://www.springboottutorial.com/spring-boot-and-spring-jdbc-with-h2)
-[EXCECUTE SQL ON CONNECTION WITH H2](https://cinhtau.net/2015/10/29/excecute-sql-on-connection-with-h2/)
+- [Integrating Spring Boot and Spring JDBC with H2 and Starter JDBC](http://www.springboottutorial.com/spring-boot-and-spring-jdbc-with-h2)
+- [EXCECUTE SQL ON CONNECTION WITH H2](https://cinhtau.net/2015/10/29/excecute-sql-on-connection-with-h2/)
