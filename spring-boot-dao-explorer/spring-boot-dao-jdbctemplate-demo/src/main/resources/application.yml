@@ -5,7 +5,6 @@ spring:
       ## web console address: http://localhost:8888/h2-console
       ## JDBC URL : jdbc:h2:mem:testdb;MODE=MYSQL; take care the same name with the spring.datasource.url
       ## Once login use the schema.tablename to query
-      ## like select * from jack.student;
       console: true
       settings:
         web-allow-others: true
