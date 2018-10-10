@@ -1,4 +1,4 @@
-##Spring Data JDBC generic DAO implementation
+## Spring Data JDBC generic DAO implementation
 
 This page sourcing from [Spring Data JDBC generic DAO implementation](https://github.com/jirutka/spring-data-jdbc-repository)
 
