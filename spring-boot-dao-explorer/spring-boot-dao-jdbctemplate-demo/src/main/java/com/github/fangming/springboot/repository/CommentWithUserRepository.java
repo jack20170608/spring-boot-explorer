@@ -22,7 +22,7 @@ import com.github.fangming.springboot.model.CommentWithUser;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository
+//@Repository
 public class CommentWithUserRepository extends BaseJdbcRepository<CommentWithUser, Integer> {
 
     public CommentWithUserRepository(RowMapper<CommentWithUser> rowMapper, RowUnmapper<CommentWithUser> rowUnmapper, String tableName, String idColumn) {

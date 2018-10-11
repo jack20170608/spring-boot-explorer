@@ -14,3 +14,11 @@ spring:
       password:
       ### url: jdbc:h2:mem:jackDB;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS JACK\;CREATE USER IF NOT EXISTS jack PASSWORD ''\;SET SCHEMA JACK;
       url: jdbc:h2:mem:jackDB;MODE=MYSQL;INIT=RUNSCRIPT FROM 'classpath:db/init_db.sql';DB_CLOSE_DELAY=-1;
+      ### set the default db connection pool size to 2, one issue that the init_db scripts will execute 2 times
+      ### in the future, we will use flyaway to maintain all DB scripts
+      hikari:
+        connection-test-query: SELECT 1 FROM DUAL
+        minimum-idle: 1
+        maximum-pool-size: 2
+        pool-name: jackDBPool
+        auto-commit: false

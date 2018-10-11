@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Repository
+//@Repository
 public class BoardingPassRepository extends BaseJdbcRepository<BoardingPass, Object[]> {
 
     public BoardingPassRepository(RowMapper<BoardingPass> rowMapper, RowUnmapper<BoardingPass> rowUnmapper, String tableName, String idColumn) {

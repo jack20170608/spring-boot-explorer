@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 @Repository
 public class UserRepository extends BaseJdbcRepository<User, Long> {
@@ -32,10 +33,10 @@ public class UserRepository extends BaseJdbcRepository<User, Long> {
         row.put(ID.name(), o.getId());
         row.put(USER_NAME.name(), o.getUserName());
         row.put(SEX.name(), o.getSex().name());
-        row.put(DATE_OF_BIRTH.name(), Date.valueOf(o.getDateOfBirth()));
+        row.put(DATE_OF_BIRTH.name(), Optional.ofNullable(o.getDateOfBirth()).map(Date::valueOf).orElse(null));
         row.put(REPUTATION.name(), o.getReputation());
         row.put(ENABLED.name(), o.isEnabled());
-        row.put(LAST_LOGIN_TS.name(), Timestamp.valueOf(o.getLastLoginTimestamp()));
+        row.put(LAST_LOGIN_TS.name(), Optional.ofNullable(o.getLastLoginTimestamp()).map(Timestamp::valueOf).orElse(null));
         return row;
     };
 

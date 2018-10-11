@@ -64,6 +64,9 @@ public class User implements Persistable<Long> {
         return true;
     }
 
+    public User() {
+    }
+
     public User(Long id, String userName, Sex sex, LocalDate dateOfBirth, int reputation, boolean enabled, LocalDateTime lastLoginTimestamp) {
         this.id = id;
         this.userName = userName;

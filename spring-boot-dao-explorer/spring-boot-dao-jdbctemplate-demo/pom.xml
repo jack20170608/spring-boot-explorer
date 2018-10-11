@@ -32,6 +32,17 @@
             <artifactId>spring-boot-dao-jdbctemplate</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- the Swagger dependency -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <scope>compile</scope>
+        </dependency>
         <!-- using the H2 as the testing DB  -->
         <dependency>
             <groupId>com.h2database</groupId>
