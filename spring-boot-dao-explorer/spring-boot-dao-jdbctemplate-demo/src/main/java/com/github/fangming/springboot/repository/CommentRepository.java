@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.github.fangming.springboot.model.Comment.Columns;
 
@@ -29,7 +30,7 @@ public class CommentRepository extends BaseJdbcRepository<Comment, String> {
         row.put(Columns.ID.name(), o.getId());
         row.put(Columns.USER_ID.name(), o.getUserId());
         row.put(Columns.CONTENTS.name(), o.getContents());
-        row.put(Columns.CREATED_TS.name(), Timestamp.valueOf(o.getCreatedTimestamp()));
+        row.put(Columns.CREATED_TS.name(), Optional.ofNullable(o.getCreatedTimestamp()).map(Timestamp::valueOf).orElse(null));
         row.put(Columns.FAVOURITE_COUNT.name(), o.getFavouriteCount());
         return row;
     };

@@ -68,8 +68,8 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     public BaseJdbcRepository(EntityInformation<T, ID> entityInformation, RowMapper<T> rowMapper,
                               RowUnmapper<T> rowUnmapper, TableDescription table) {
-        Assert.notNull(rowMapper);
-        Assert.notNull(table);
+        Objects.requireNonNull(rowMapper);
+        Objects.requireNonNull(table);
 
         this.entityInfo = entityInformation != null ? entityInformation : createEntityInformation();
         this.rowUnmapper = rowUnmapper != null ? rowUnmapper : new UnsupportedRowUnmapper<T>();
@@ -92,7 +92,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     @Override
     public void afterPropertiesSet() {
-        Assert.notNull(dataSource, "dataSource must be provided");
+        Objects.requireNonNull(dataSource, "dataSource must be provided");
 
         if (jdbcOps == null) {
             jdbcOps = new JdbcTemplate(dataSource);
@@ -154,7 +154,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     @Override
     public long count() {
-        return jdbcOps.queryForObject(sqlGenerator.count(table), Long.class);
+        return Optional.ofNullable(jdbcOps.queryForObject(sqlGenerator.count(table), Long.class)).orElse(0L);
     }
 
     @Override
