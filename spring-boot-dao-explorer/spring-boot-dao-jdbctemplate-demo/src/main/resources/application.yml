@@ -21,4 +21,5 @@ spring:
         minimum-idle: 1
         maximum-pool-size: 2
         pool-name: jackDBPool
-        auto-commit: false
+        ## auto-commit here as currently not transaction management in this project.
+        auto-commit: true
