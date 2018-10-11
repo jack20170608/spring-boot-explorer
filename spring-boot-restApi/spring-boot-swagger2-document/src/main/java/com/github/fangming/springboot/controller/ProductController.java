@@ -32,25 +32,25 @@ public class ProductController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     }
     )
-    @RequestMapping(value = "/list", method= RequestMethod.GET, produces = "application/json")
+    @GetMapping(value = "/list", produces = "application/json")
     public Iterable<Product> list(Model model){
         return productService.listAllProducts();
     }
     @ApiOperation(value = "Search a product with an ID",response = Product.class)
-    @RequestMapping(value = "/show/{id}", method= RequestMethod.GET, produces = "application/json")
+    @GetMapping(value = "/show/{id}", produces = "application/json")
     public Product showProduct(@PathVariable Integer id, Model model){
         return productService.getProductById(id);
     }
 
     @ApiOperation(value = "Add a product")
-    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json")
+    @PostMapping(value = "/add",  produces = "application/json")
     public ResponseEntity saveProduct(@RequestBody Product product){
         productService.saveProduct(product);
         return new ResponseEntity("Product saved successfully", HttpStatus.OK);
     }
 
     @ApiOperation(value = "Update a product")
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT, produces = "application/json")
+    @PutMapping(value = "/update/{id}", produces = "application/json")
     public ResponseEntity updateProduct(@PathVariable Integer id, @RequestBody Product product){
         Product storedProduct = productService.getProductById(id);
         storedProduct.setDescription(product.getDescription());
@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     @ApiOperation(value = "Delete a product")
-    @RequestMapping(value="/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    @DeleteMapping(value="/delete/{id}", produces = "application/json")
     public ResponseEntity delete(@PathVariable Integer id){
         productService.deleteProduct(id);
         return new ResponseEntity("Product deleted successfully", HttpStatus.OK);

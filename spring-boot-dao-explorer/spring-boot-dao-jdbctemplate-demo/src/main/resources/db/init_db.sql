@@ -7,10 +7,13 @@ SET SCHEMA JACK;
 --CREATE TABLE
 
 CREATE TABLE IF NOT EXISTS USERS (
-  user_name varchar(256) PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_name varchar(256) NOT NULL,
+  sex varchar(10),
   date_of_birth DATE NOT NULL,
   reputation INT NOT NULL,
-  enabled BOOLEAN NOT NULL
+  enabled BOOLEAN NOT NULL,
+  last_login_ts timestamp
 );
 
 CREATE TABLE IF NOT EXISTS COMMENTS (
@@ -31,3 +34,8 @@ CREATE TABLE IF NOT EXISTS BOARDING_PASS (
 );
 
 --init the testing data
+insert into USERS(user_name, sex, date_of_birth, reputation, enabled, last_login_ts)
+values('jack', 'MAN', '1988-08-08', 100, true, '2018-09-18 18:47:46.90');
+
+insert into USERS(user_name, sex, date_of_birth, reputation, enabled, last_login_ts)
+values('peter', 'WOMAN', '1999-08-08', 100, true, '2018-09-29 00:11:45.67');

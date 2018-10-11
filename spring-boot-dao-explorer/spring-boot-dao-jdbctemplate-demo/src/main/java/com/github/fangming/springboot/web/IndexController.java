@@ -8,6 +8,6 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(){
-        return "Please go to the <a href='student/list'>list all students</a>";
+        return "Please go to the <a href='user/list'>list all users</a>";
     }
 }
