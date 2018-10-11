@@ -5,7 +5,7 @@ CREATE USER IF NOT EXISTS jack PASSWORD '';
 SET SCHEMA JACK;
 
 --CREATE TABLE
-
+-- User table have a inner auto increment key generate strategy
 CREATE TABLE IF NOT EXISTS USERS (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_name varchar(256) NOT NULL,
@@ -16,15 +16,17 @@ CREATE TABLE IF NOT EXISTS USERS (
   last_login_ts timestamp
 );
 
+-- Comment table's key generation strategy outside of db (UUID)
 CREATE TABLE IF NOT EXISTS COMMENTS (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_name varchar(256),
+  id varchar2(100) PRIMARY KEY,
+  user_id INT,
   contents varchar(1000),
   created_time TIMESTAMP NOT NULL,
   favourite_count INT NOT NULL,
-  FOREIGN KEY (user_name) REFERENCES USERS(user_name)
+  FOREIGN KEY (user_id) REFERENCES USERS(id)
 );
 
+--Compount key
 CREATE TABLE IF NOT EXISTS BOARDING_PASS (
   flight_no varchar(8) NOT NULL,
   seq_no INT NOT NULL,

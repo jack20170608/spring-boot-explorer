@@ -6,7 +6,6 @@ import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class User implements Persistable<Long> {
 
@@ -46,8 +45,6 @@ public class User implements Persistable<Long> {
     }
 
 
-    private transient boolean persisted;
-
     private Long id;
     private String userName;
     private Sex sex;
@@ -61,14 +58,10 @@ public class User implements Persistable<Long> {
         return id;
     }
 
+    //Always set to true if use key generation strategy inside DB
     @Override
     public boolean isNew() {
-        return !persisted;
-    }
-
-    public User withPersisted(boolean persisted) {
-        this.persisted = persisted;
-        return this;
+        return true;
     }
 
     public User(Long id, String userName, Sex sex, LocalDate dateOfBirth, int reputation, boolean enabled, LocalDateTime lastLoginTimestamp) {

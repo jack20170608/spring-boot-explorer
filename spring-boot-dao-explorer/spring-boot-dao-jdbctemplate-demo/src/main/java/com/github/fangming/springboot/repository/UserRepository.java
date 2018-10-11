@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
 @Repository
-public class UserRepository extends BaseJdbcRepository<User, String> {
+public class UserRepository extends BaseJdbcRepository<User, Long> {
 
     //Row of table to Object mapper
     public static final RowMapper<User> ROW_MAPPER = (rs, rowNum) -> new User(
@@ -24,7 +24,7 @@ public class UserRepository extends BaseJdbcRepository<User, String> {
         ,rs.getInt(REPUTATION.name())
         ,rs.getBoolean(ENABLED.name())
         ,rs.getTimestamp(LAST_LOGIN_TS.name()).toLocalDateTime()
-    ).withPersisted(true);
+    );
 
     //Object to row mapper
     public static final RowUnmapper<User> ROW_UNMAPPER = o -> {
@@ -44,16 +44,9 @@ public class UserRepository extends BaseJdbcRepository<User, String> {
         super(ROW_MAPPER, ROW_UNMAPPER, User.TABLE_NAME, User.ID_COLUMN);
     }
 
-
-    @Override
-    protected <S extends User> S postUpdate(S entity) {
-        entity.withPersisted(true);
-        return entity;
-    }
-
     @Override
     protected <S extends User> S postInsert(S entity, Number generatedId) {
-        entity.withPersisted(true);
+        entity.setId(generatedId.longValue());
         return entity;
     }
 }
