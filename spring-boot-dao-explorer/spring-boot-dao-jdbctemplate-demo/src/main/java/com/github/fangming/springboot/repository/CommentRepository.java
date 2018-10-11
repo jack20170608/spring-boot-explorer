@@ -23,7 +23,7 @@ public class CommentRepository extends BaseJdbcRepository<Comment, String> {
         ,rs.getString(Columns.CONTENTS.name())
         ,rs.getTimestamp(Columns.CREATED_TS.name()).toLocalDateTime()
         ,rs.getInt(Columns.FAVOURITE_COUNT.name())
-    );
+    ).withPersisted(true);
 
     public static final RowUnmapper<Comment> ROW_UNMAPPER = o -> {
         Map<String, Object> row = new LinkedHashMap<>();

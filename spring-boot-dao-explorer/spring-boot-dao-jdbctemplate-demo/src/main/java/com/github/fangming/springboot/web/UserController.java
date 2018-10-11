@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping(value = "/show/{id}", produces = "application/json")
     public ResponseEntity<User> showUser(@PathVariable Long id, Model model){
         Optional<User> userOptional = userRepository.findById(id);
-        return userOptional.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>((User) null, HttpStatus.NOT_FOUND));
+        return userOptional.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     //TODO, will dig out to find a best way to handing exception
@@ -39,24 +39,20 @@ public class UserController {
     @PostMapping(value = "/add",  produces = "application/json")
     public ResponseEntity<User> addUser(@RequestBody User user){
         User persistedUser = userRepository.save(user);
-        return new ResponseEntity<>(persistedUser, HttpStatus.OK);
+        return ResponseEntity.ok(persistedUser);
     }
 
     @ApiOperation(value = "Update a user")
     @PutMapping(value = "/update/{id}", produces = "application/json")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user){
         Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()){
-            User storedUser = userOptional.get();
-            storedUser.setDateOfBirth(user.getDateOfBirth());
-            storedUser.setUserName(user.getUserName());
-            storedUser.setReputation(user.getReputation());
-            storedUser.setSex(user.getSex());
-            storedUser.setEnabled(user.isEnabled());
-            User persistedUser = userRepository.save(storedUser);
-            return new ResponseEntity<>(persistedUser, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>((User)null, HttpStatus.NOT_FOUND);
-        }
+        return userOptional.map((u) -> {
+            u.setDateOfBirth(user.getDateOfBirth());
+            u.setUserName(user.getUserName());
+            u.setReputation(user.getReputation());
+            u.setSex(user.getSex());
+            u.setEnabled(user.isEnabled());
+            return ResponseEntity.ok(userRepository.save(u));
+        }).orElse(ResponseEntity.notFound().build());
     }
 }

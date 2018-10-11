@@ -367,15 +367,13 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         final Object[] queryParams = columns.values().toArray();
         final GeneratedKeyHolder key = new GeneratedKeyHolder();
 
-        jdbcOps.update(new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                String idColumnName = table.getPkColumns().get(0);
-                PreparedStatement ps = con.prepareStatement(insertQuery, new String[]{idColumnName});
-                for (int i = 0; i < queryParams.length; ++i) {
-                    ps.setObject(i + 1, queryParams[i]);
-                }
-                return ps;
+        jdbcOps.update(con -> {
+            String idColumnName = table.getPkColumns().get(0);
+            PreparedStatement ps = con.prepareStatement(insertQuery, new String[]{idColumnName});
+            for (int i = 0; i < queryParams.length; ++i) {
+                ps.setObject(i + 1, queryParams[i]);
             }
+            return ps;
         }, key);
 
         return postInsert(entity, key.getKey());
@@ -408,8 +406,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     @SuppressWarnings("unchecked")
     private EntityInformation<T, ID> createEntityInformation() {
 
-        Class<T> entityType = (Class<T>) GenericTypeResolver.resolveTypeArguments(
-            getClass(), BaseJdbcRepository.class)[0];
+        Class<T> entityType = (Class<T>) GenericTypeResolver.resolveTypeArguments(getClass(), BaseJdbcRepository.class)[0];
 
         if (Persistable.class.isAssignableFrom(entityType)) {
             return new PersistableEntityInformation(entityType);

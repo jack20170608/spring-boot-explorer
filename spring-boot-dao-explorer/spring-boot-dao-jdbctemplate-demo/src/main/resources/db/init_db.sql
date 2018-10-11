@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS COMMENTS (
   id varchar2(100) PRIMARY KEY,
   user_id INT,
   contents varchar(1000),
-  created_time TIMESTAMP NOT NULL,
+  created_ts TIMESTAMP NOT NULL,
   favourite_count INT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES USERS(id)
 );
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS BOARDING_PASS (
 );
 
 --init the testing data
-insert into USERS(user_name, sex, date_of_birth, reputation, enabled, last_login_ts)
-values('jack', 'MAN', '1988-08-08', 100, true, '2018-09-18 18:47:46.90');
+-- insert into USERS(user_name, sex, date_of_birth, reputation, enabled, last_login_ts)
+-- values('jack', 'MAN', '1988-08-08', 100, true, '2018-09-18 18:47:46.90');
 
-insert into USERS(user_name, sex, date_of_birth, reputation, enabled, last_login_ts)
-values('peter', 'WOMAN', '1999-08-08', 100, true, '2018-09-29 00:11:45.67');
+-- insert into USERS(user_name, sex, date_of_birth, reputation, enabled, last_login_ts)
+-- values('peter', 'WOMAN', '1999-08-08', 100, true, '2018-09-29 00:11:45.67');
