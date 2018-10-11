@@ -29,14 +29,14 @@ public class DataInitBootstrap implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-        User jack = new User(-1000L, "jack", User.Sex.MAN, LocalDate.of(2018,8,8)
+        User jack = new User(null, "jack", User.Sex.MAN, LocalDate.of(2018,8,8)
                         ,100, true, LocalDateTime.of(2017,12,11,5,23,34));
-        User lucy = new User(-1001L, "lucy", User.Sex.WOMAN, LocalDate.of(2018,8,8)
+        User lucy = new User(null, "lucy", User.Sex.WOMAN, LocalDate.of(2018,8,8)
             ,100, true, LocalDateTime.of(2010,12,11,2,23,34));
         userRepository.save(jack);
         userRepository.save(lucy);
 
-        Comment c1 = new Comment("100", -1000L, "Good good study", LocalDateTime.of(1999,11,11,12,12,00),
+        Comment c1 = new Comment("100", 1L, "Good good study", LocalDateTime.of(1999,11,11,12,12,00),
             1000);
         commentRepository.save(c1);
 

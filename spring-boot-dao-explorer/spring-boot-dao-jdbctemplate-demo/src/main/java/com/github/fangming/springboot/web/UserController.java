@@ -38,7 +38,7 @@ public class UserController {
     @ApiOperation(value = "Add a user")
     @PostMapping(value = "/add",  produces = "application/json")
     public ResponseEntity<User> addUser(@RequestBody User user){
-        User persistedUser = userRepository.save(user);
+        User persistedUser = userRepository.insert(user);
         return ResponseEntity.ok(persistedUser);
     }
 
@@ -52,7 +52,7 @@ public class UserController {
             u.setReputation(user.getReputation());
             u.setSex(user.getSex());
             u.setEnabled(user.isEnabled());
-            return ResponseEntity.ok(userRepository.save(u));
+            return ResponseEntity.ok(userRepository.update(u));
         }).orElse(ResponseEntity.notFound().build());
     }
 }
