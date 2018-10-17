@@ -14,7 +14,16 @@
     <modules>
         <module>spring-boot-dao-jdbctemplate</module>
         <module>spring-boot-dao-jdbctemplate-demo</module>
+        <module>spring-boot-jdbc-explorer</module>
     </modules>
+
+    <dependencies>
+        <!-- compile -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
 
 
 </project>

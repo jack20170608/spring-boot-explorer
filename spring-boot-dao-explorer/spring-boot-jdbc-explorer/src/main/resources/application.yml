@@ -1,0 +1,16 @@
+server:
+  port: 8888
+spring:
+    h2:
+      ## web console address: http://localhost:8888/h2-console
+      console: true
+      settings:
+        web-allow-others: true
+## configurations for the basic pool
+basic:
+  pool:
+    url: jdbc:h2:mem:test;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS JACK\;CREATE USER IF NOT EXISTS jack PASSWORD ''\;SET SCHEMA JACK;
+    driver: org.h2.Driver
+    user: jack
+    password:
+    poolSize: 3
