@@ -29,7 +29,7 @@ public class SimpleH2DbApp implements CommandLineRunner {
         SpringApplication.run(SimpleH2DbApp.class, args);
     }
 
-    static ThrowingConsumer<Connection, Exception> jdbcOperationWrapper(ThrowingConsumer<Statement, Exception> originOperation) {
+    private static ThrowingConsumer<Connection, Exception> jdbcOperationWrapper(ThrowingConsumer<Statement, Exception> originOperation) {
         return (Connection connection) -> {
             Statement statement = null;
             try {
@@ -46,7 +46,7 @@ public class SimpleH2DbApp implements CommandLineRunner {
         };
     }
 
-    static ThrowingConsumer<Statement, Exception> createTable = (Statement statement) -> {
+    private static ThrowingConsumer<Statement, Exception> createTable = (Statement statement) -> {
         logger.info("Creating table in given database...");
         String sql = "CREATE TABLE REGISTRATION " +
             "(id INTEGER not NULL, " +
@@ -58,7 +58,7 @@ public class SimpleH2DbApp implements CommandLineRunner {
         logger.info("Created table in given database...");
     };
 
-    static ThrowingConsumer<Statement, Exception> insertData = (Statement statement) -> {
+    private static ThrowingConsumer<Statement, Exception> insertData = (Statement statement) -> {
         logger.info("inserting data into table ....");
         String sql = "INSERT INTO Registration " + "VALUES (100, 'Zara', 'Ali', 18)";
         statement.executeUpdate(sql);
@@ -73,7 +73,7 @@ public class SimpleH2DbApp implements CommandLineRunner {
     };
 
 
-    static ThrowingConsumer<Statement, Exception> queryData = (Statement statement) -> {
+    private static ThrowingConsumer<Statement, Exception> queryData = (Statement statement) -> {
         logger.info("querying data from table ....");
         String sql = "SELECT id, first, last, age FROM Registration";
         ResultSet rs = statement.executeQuery(sql);
