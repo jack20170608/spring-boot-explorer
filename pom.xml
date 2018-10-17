@@ -9,6 +9,7 @@
         <module>spring-boot-common</module>
         <module>spring-boot-restApi</module>
         <module>spring-boot-dao-explorer</module>
+        <module>spring-boot-explorer-utils</module>
     </modules>
     <packaging>pom</packaging>
     <name>Spring Boot Explorer Application</name>

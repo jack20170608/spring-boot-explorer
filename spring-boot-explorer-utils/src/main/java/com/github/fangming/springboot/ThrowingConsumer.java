@@ -1,4 +1,4 @@
-package com.github.fangming.springboot.h2;
+package com.github.fangming.springboot;
 
 @FunctionalInterface
 public interface ThrowingConsumer<T, E extends Exception> {

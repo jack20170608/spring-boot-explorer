@@ -1,4 +1,4 @@
-package com.github.fangming.springboot.h2;
+package com.github.fangming.springboot;
 
 @FunctionalInterface
 public interface ThrowingFunction<T, R, E extends Exception> {
