@@ -9,7 +9,7 @@ spring:
 ## configurations for the basic pool
 basic:
   pool:
-    url: jdbc:h2:mem:test;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS JACK\;CREATE USER IF NOT EXISTS jack PASSWORD ''\;SET SCHEMA JACK;
+    url: jdbc:h2:mem:jackDB;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS JACK\;CREATE USER IF NOT EXISTS jack PASSWORD ''\;SET SCHEMA JACK;
     driver: org.h2.Driver
     user: jack
     password:

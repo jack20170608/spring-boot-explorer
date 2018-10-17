@@ -1,6 +1,7 @@
 package com.github.fangming.springboot.jdbc.web;
 
 import com.github.fangming.springboot.jdbc.common.ConnectionPool;
+import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.util.Arrays;
 import java.util.Map;
 
 import static java.sql.Connection.*;
@@ -33,9 +35,17 @@ public class JdbcMetaDataController {
         private final int value;
 
         static Map<Integer, TransactionIsolationLevel> dataMap = Maps.newHashMap();
+        static  {
+            dataMap = Maps.uniqueIndex(Arrays.asList(TransactionIsolationLevel.values())
+                , TransactionIsolationLevel::getValue);
+        }
 
         TransactionIsolationLevel(int value){
             this.value = value;
+        }
+
+        public int getValue() {
+            return value;
         }
 
         public static TransactionIsolationLevel getByLevel(int value){
@@ -58,7 +68,7 @@ public class JdbcMetaDataController {
                 .append(metaData.getDatabaseProductName()).append("<br/>")
                 .append("DB product version:").append(metaData.getDatabaseProductVersion()).append("<br/>")
                 .append("----------------------transaction isolation level----------------------------------").append("<br/>")
-                .append("DB's default transaction isolation level is :").append(metaData.getDefaultTransactionIsolation()).append("<br/>")
+                .append("DB's default transaction isolation level is: ").append(TransactionIsolationLevel.getByLevel(metaData.getDefaultTransactionIsolation())).append("<br/>")
                 .append("TRANSACTION_NONE supported: ").append(metaData.supportsTransactionIsolationLevel(TRANSACTION_NONE)).append("<br/>")
                 .append("TRANSACTION_READ_UNCOMMITTED supported: ").append(metaData.supportsTransactionIsolationLevel(TRANSACTION_READ_UNCOMMITTED)).append("<br/>")
                 .append("TRANSACTION_READ_COMMITTED supported: ").append(metaData.supportsTransactionIsolationLevel(TRANSACTION_READ_COMMITTED)).append("<br/>")

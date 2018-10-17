@@ -10,6 +10,9 @@ public class IndexController {
 
     @GetMapping
     public String index(){
-        return "Hello,Welcome to the jdbc explorer sample project";
+        return "Hello,Welcome to the jdbc explorer sample project.<ul> "
+            + "<li><a href='h2-console'>H2 Console Link</a> (url-> jdbc:h2:mem:test; username-> jack; password -> )</li>"
+            + "<li><a href='jdbc-meta'>DB metadata</a></li>"
+            +"</ul>";
     }
 }

@@ -46,6 +46,7 @@ public class BasicConnectioniPoolImpl implements ConnectionPool{
                 connectionList.add(conn);
             }
         }catch (SQLException | ClassNotFoundException e){
+            logger.error("DB connection pool initial failure.");
             e.printStackTrace();
         }
     }
