@@ -185,6 +185,5 @@ public class RegistrationServiceImpl {
 
         return result.toString();
 
-
     }
 }
