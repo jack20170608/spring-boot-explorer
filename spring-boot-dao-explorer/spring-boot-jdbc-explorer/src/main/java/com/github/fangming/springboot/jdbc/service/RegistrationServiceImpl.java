@@ -108,7 +108,8 @@ public class RegistrationServiceImpl {
         result.append("/*****************************************/<br/>");
 
         Thread t1 = new Thread(() -> {
-            result.append(Thread.currentThread().getName() + " start...<br/>");
+            result.append(Thread.currentThread().getName()).append(" start...<br/>");
+            Connection queryConn = null;
             try {
                 synchronized (monitors[0]) {
                     while (!states[0]) {
@@ -116,17 +117,9 @@ public class RegistrationServiceImpl {
                     }
                 }
                 result.append(Thread.currentThread().getName()).append(" Querying data...<br/>");
-
-                Connection queryConn = connectionPool.getConnection();
-                Registration middleRegistration = null;
-                try {
-                    middleRegistration = registrationDao.getById(queryConn, 1L);
-                } catch (Exception e) {
-                    logger.error("Get by Id failure.");
-                } finally {
-                    connectionPool.releaseConnection(queryConn);
-                }
-
+                queryConn = connectionPool.getConnection();
+                queryConn.setTransactionIsolation(transactionIsolationLevel);
+                Registration middleRegistration  = registrationDao.getById(queryConn, 1L);
                 result.append("Middle transaction value: ").append(middleRegistration.toString()).append("<br/>");
 
                 synchronized (monitors[1]) {
@@ -137,17 +130,19 @@ public class RegistrationServiceImpl {
             } catch (Exception e) {
                 System.out.println("some error happen.");
                 e.printStackTrace();
+            } finally {
+                connectionPool.releaseConnection(queryConn);
             }
         }, "DataQueryThread");
 
         Thread t2 = new Thread(() -> {
             result.append(Thread.currentThread().getName()).append(" start...<br/>");
             result.append(Thread.currentThread().getName()).append(" updating data...<br/>");
-
-            Registration newRegistration = new Registration(1L, "Jack", "Fang", 28);
-            Connection updateConn = connectionPool.getConnection();
+            Connection updateConn = null;
             try {
-                registrationDao.update(updateConn, newRegistration);
+                updateConn = connectionPool.getConnection();
+                updateConn.setTransactionIsolation(transactionIsolationLevel);
+                registrationDao.updateAge(updateConn, 1L, 1);
                 states[0] = true;
                 synchronized (monitors[0]) {
                     monitors[0].notify();
@@ -162,7 +157,117 @@ public class RegistrationServiceImpl {
                 updateConn.rollback();
             } catch (Exception e) {
                 try {
-                    updateConn.rollback();
+                    if (null != updateConn) {
+                        updateConn.rollback();
+                    }
+                } catch (SQLException ignored) {
+                }
+            } finally {
+                if (null != updateConn) {
+                    connectionPool.releaseConnection(updateConn);
+                }
+            }
+            result.append(Thread.currentThread().getName()).append(" done...<br/>");
+
+        }, "DataUpdateThread");
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+
+        registration = this.getById(1L);
+        result.append("/*****************************************/<br/>");
+        result.append("The last value: ").append(registration.toString()).append("*/<br/>");
+        result.append("/*****************************************/<br/>");
+
+        result.append("Testing done............<br/>");
+
+        return result.toString();
+
+    }
+
+    public String repeatableRead(final int transactionIsolationLevel) throws Exception {
+        Object[] monitors = {new Object(), new Object()};
+        boolean[] states = {false, false};
+        StringBuffer result = new StringBuffer();
+
+        Registration registration = this.getById(1L);
+        result.append("/*****************************************/<br/>");
+        result.append("Initial value: ").append(registration.toString()).append("*/<br/>");
+        result.append("/*****************************************/<br/>");
+
+        Thread t1 = new Thread(() -> {
+            result.append(Thread.currentThread().getName()).append(" start...<br/>");
+            Connection queryConn = null;
+            try {
+                queryConn = connectionPool.getConnection();
+                //Set the query connection isolation level
+                queryConn.setTransactionIsolation(transactionIsolationLevel);
+                result.append(Thread.currentThread().getName()).append("1st round querying data...<br/>");
+                Registration middleRegistration = registrationDao.getById(queryConn, 1L);
+                result.append("1st round query result : ").append(middleRegistration.toString()).append("<br/>");
+
+                //Notify the update thread can update data.
+                synchronized (monitors[0]) {
+                    states[0] = true;
+                    monitors[0].notifyAll();
+                }
+
+                //Waiting the update thread finish
+                synchronized (monitors[1]) {
+                    while (!states[1]) {
+                        monitors[1].wait();
+                    }
+                }
+                registrationDao.updateAge(queryConn, 2L, 1);
+                result.append(Thread.currentThread().getName()).append("2nd round querying data...<br/>");
+                middleRegistration = registrationDao.getById(queryConn, 1L);
+                result.append("2nd round query result : ").append(middleRegistration.toString()).append("<br/>");
+                result.append(Thread.currentThread().getName()).append(" done...<br/>");
+                queryConn.commit();
+
+            } catch (Exception e) {
+                try {
+                    if (queryConn != null) {
+                        queryConn.rollback();
+                    }
+                } catch (SQLException ignored) {
+                }
+                logger.error("some error happen, [{}].", e.getMessage());
+                e.printStackTrace();
+            } finally {
+                connectionPool.releaseConnection(queryConn);
+            }
+        }, "DataQueryThread");
+
+        Thread t2 = new Thread(() -> {
+            result.append(Thread.currentThread().getName()).append(" start...<br/>");
+            Connection updateConn = null;
+            try {
+                //Waiting the query thread finish the 1st round query
+                synchronized (monitors[0]) {
+                    while (!states[0]) {
+                        monitors[0].wait();
+                    }
+                }
+                result.append(Thread.currentThread().getName()).append(" updating data...<br/>");
+                updateConn = connectionPool.getConnection();
+                updateConn.setTransactionIsolation(transactionIsolationLevel);
+                registrationDao.updateAge(updateConn, 1L, 1);
+
+                result.append(Thread.currentThread().getName()).append(" commit...<br/>");
+                updateConn.commit();
+                //Update done, notify the query thread do the 2nd round query
+                states[1] = true;
+                synchronized (monitors[1]) {
+                    monitors[1].notify();
+                }
+
+            } catch (Exception e) {
+                try {
+                    if (null != updateConn) {
+                        updateConn.rollback();
+                    }
                 } catch (SQLException ignored) {
                 }
             } finally {
@@ -186,4 +291,5 @@ public class RegistrationServiceImpl {
         return result.toString();
 
     }
+
 }

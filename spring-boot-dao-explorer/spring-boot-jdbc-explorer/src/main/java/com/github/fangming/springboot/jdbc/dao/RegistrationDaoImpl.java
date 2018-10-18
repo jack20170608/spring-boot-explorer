@@ -118,6 +118,27 @@ public class RegistrationDaoImpl {
         }
     }
 
+    public void updateAge(Connection conn, Long id, int ageDelta) {
+        PreparedStatement statement = null;
+        try {
+            String sql = "update REGISTRATION set AGE = AGE + ? where id = ?;";
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, ageDelta);
+            statement.setLong(2, id);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            logger.error("update operation failure....");
+            throw new RuntimeException("DAO update operation failure.", e);
+        } finally {
+            if (null != statement) {
+                try {
+                    statement.close();
+                } catch (SQLException ignored) {
+                }
+            }
+        }
+    }
+
     public List<Registration> getAll(Connection conn) {
         Statement stmt = null;
         List<Registration> result = Lists.newArrayList();

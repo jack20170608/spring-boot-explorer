@@ -41,4 +41,13 @@ public class RegistrationController {
         }
     }
 
+    @GetMapping("repeatRead/{isolationLevel}")
+    public String repeatRead(@PathVariable("isolationLevel") int isolationLevel){
+        try {
+            return registrationService.repeatableRead(isolationLevel);
+        }catch (Exception e){
+            return "Interner error happen";
+        }
+    }
+
 }
