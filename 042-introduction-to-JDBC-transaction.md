@@ -112,4 +112,5 @@ Anomaly Serializable is not the same as Serializable. That is, it is necessary, 
 
 - [Isolation (database systems)](https://en.wikipedia.org/wiki/Isolation_(database_systems))
 
+### deep in the transaction isolation implementation 
 
