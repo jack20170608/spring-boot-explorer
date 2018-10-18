@@ -1,6 +1,5 @@
 package com.github.fangming.springboot.jdbc.web;
 
-import com.github.fangming.springboot.jdbc.dao.RegistrationDaoImpl;
 import com.github.fangming.springboot.jdbc.model.Registration;
 import com.github.fangming.springboot.jdbc.service.RegistrationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
