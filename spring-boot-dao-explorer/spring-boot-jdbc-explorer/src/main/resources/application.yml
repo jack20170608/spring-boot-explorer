@@ -12,7 +12,8 @@ basic:
     #### LOCK_MODE=0;  Read Uncommitted, no transaction isolation
     #### LOCK_MODE=3;  Read Committed, can avoid dirty reads , the default setting
     #### LOCK_MODE=1;  Serializable the worst performance
-    url: jdbc:h2:mem:jackDB;MODE=MYSQL;LOCK_MODE=0;INIT=CREATE SCHEMA IF NOT EXISTS JACK\;CREATE USER IF NOT EXISTS jack PASSWORD ''\;SET SCHEMA JACK;
+    #### Refer to http://www.h2database.com/html/advanced.html
+    url: jdbc:h2:mem:jackDB;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS JACK\;CREATE USER IF NOT EXISTS jack PASSWORD ''\;SET SCHEMA JACK;
     driver: org.h2.Driver
     user: jack
     password:
