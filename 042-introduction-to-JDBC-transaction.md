@@ -114,3 +114,6 @@ Anomaly Serializable is not the same as Serializable. That is, it is necessary, 
 
 ### deep in the transaction isolation implementation 
 
+-[deep-into-isolation-levels](https://www.slideshare.net/brshristov/deep-into-isolation-levels)
+
+
