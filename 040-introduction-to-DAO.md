@@ -22,8 +22,8 @@ Use a Data Access Object when:
 
 ### Related Patterns
 
-[Abstract Factory](http://best-practice-software-engineering.ifs.tuwien.ac.at/patterns/factory.html): Applications often use a Factory to select the right DAO implementation at run time.
-]Transfer Object](http://best-practice-software-engineering.ifs.tuwien.ac.at/patterns/transfer_object.html): The DAO pattern often uses a Transfer Object to send data from the data source to its client and vice versa.
+- [Abstract Factory](http://best-practice-software-engineering.ifs.tuwien.ac.at/patterns/factory.html): Applications often use a Factory to select the right DAO implementation at run time.
+- [Transfer Object](http://best-practice-software-engineering.ifs.tuwien.ac.at/patterns/transfer_object.html): The DAO pattern often uses a Transfer Object to send data from the data source to its client and vice versa.
 
 ### Structure
 UML diagram of the sample code:
