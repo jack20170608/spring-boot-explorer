@@ -1,4 +1,4 @@
-package com.github.fangming.springboot.jdbc.common;
+package com.github.fangming.springboot.jdbc.transaction;
 
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;

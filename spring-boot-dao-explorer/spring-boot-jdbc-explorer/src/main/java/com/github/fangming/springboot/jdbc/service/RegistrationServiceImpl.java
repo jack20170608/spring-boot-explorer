@@ -1,6 +1,6 @@
 package com.github.fangming.springboot.jdbc.service;
 
-import com.github.fangming.springboot.jdbc.common.ConnectionPool;
+import com.github.fangming.springboot.jdbc.transaction.ConnectionPool;
 import com.github.fangming.springboot.jdbc.dao.RegistrationDaoImpl;
 import com.github.fangming.springboot.jdbc.model.Registration;
 import com.google.common.collect.Lists;

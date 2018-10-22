@@ -1,7 +1,6 @@
 package com.github.fangming.springboot.jdbc.web;
 
-import com.github.fangming.springboot.jdbc.common.ConnectionPool;
-import com.google.common.base.Function;
+import com.github.fangming.springboot.jdbc.transaction.ConnectionPool;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

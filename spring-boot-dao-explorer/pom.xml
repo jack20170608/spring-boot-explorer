@@ -15,6 +15,7 @@
         <module>spring-boot-dao-jdbctemplate</module>
         <module>spring-boot-dao-jdbctemplate-demo</module>
         <module>spring-boot-jdbc-explorer</module>
+        <module>spring-boot-jdbc-transaction-management</module>
     </modules>
 
     <dependencies>

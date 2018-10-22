@@ -1,4 +1,4 @@
-package com.github.fangming.springboot.jdbc.common;
+package com.github.fangming.springboot.jdbc.transaction;
 
 import java.sql.Connection;
 
