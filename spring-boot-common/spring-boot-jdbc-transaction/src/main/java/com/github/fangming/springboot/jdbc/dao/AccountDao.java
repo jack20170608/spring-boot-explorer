@@ -7,6 +7,8 @@ import java.util.Collection;
 
 public interface AccountDao {
 
+    Long getNextId(Connection connection);
+
     Account getById(Connection connection, Long id);
 
     Collection<Account> getAll(Connection connection);

@@ -15,11 +15,7 @@ public class Account {
     private LocalDate insertDt;
     private LocalDateTime lastUpdateTs;
 
-    public Account(Long id) {
-        this.id = id;
-    }
-
-    public Account(Long id, String name, BigDecimal balance, LocalDate insertDt, LocalDateTime lastUpdateTs) {
+    private Account(Long id, String name, BigDecimal balance, LocalDate insertDt, LocalDateTime lastUpdateTs) {
         this.id = id;
         this.name = name;
         this.balance = balance;
@@ -35,32 +31,30 @@ public class Account {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public BigDecimal getBalance() {
         return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
     }
 
     public LocalDate getInsertDt() {
         return insertDt;
     }
 
-    public void setInsertDt(LocalDate insertDt) {
-        this.insertDt = insertDt;
-    }
-
     public LocalDateTime getLastUpdateTs() {
         return lastUpdateTs;
     }
 
-    public void setLastUpdateTs(LocalDateTime lastUpdateTs) {
-        this.lastUpdateTs = lastUpdateTs;
+    public static Builder builder(){
+        return new Builder();
+    }
+
+    public static Builder builder(Account source){
+        Builder builder = new Builder();
+        builder.setId(source.getId())
+            .setName(source.getName())
+            .setBalance(source.getBalance())
+            .setInsertDt(source.getInsertDt())
+            .setLastUpdateTs(source.getLastUpdateTs());
+        return builder;
     }
 
     @Override
@@ -89,5 +83,45 @@ public class Account {
             .add("insertDt", insertDt)
             .add("lastUpdateTs", lastUpdateTs)
             .toString();
+    }
+
+    public static class Builder {
+        private Long id;
+        private String name;
+        private BigDecimal balance;
+        private LocalDate insertDt;
+        private LocalDateTime lastUpdateTs;
+
+        private Builder(){
+        }
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setBalance(BigDecimal balance) {
+            this.balance = balance;
+            return this;
+        }
+
+        public Builder setInsertDt(LocalDate insertDt) {
+            this.insertDt = insertDt;
+            return this;
+        }
+
+        public Builder setLastUpdateTs(LocalDateTime lastUpdateTs) {
+            this.lastUpdateTs = lastUpdateTs;
+            return this;
+        }
+
+        public Account build(){
+            return new Account(id, name, balance, insertDt, lastUpdateTs);
+        }
     }
 }

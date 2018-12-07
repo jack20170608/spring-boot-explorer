@@ -25,8 +25,9 @@ public class AccountDaoImpl extends AbstractDaoImpl implements AccountDao {
     }
 
     private static final String GET_BY_ID_SQL = "select * from t_account where id = ?";
+    private static final String GET_NEXT_ID_SQL = "select account_id_sequence.nextval from dual";
     private static final String GET_ALL_SQL = "select * from t_account ";
-    private static final String UPDATE_SQL = "update t_account set name = ?, balance = ?, last_update_dt = ?";
+    private static final String UPDATE_SQL = "update t_account set name = ?, balance = ?, last_update_dt = ? where id = ?";
     private static final String CREATE_SQL = "insert into t_account values (?,?,?,?,?)";
     private static final String DELETE_BY_ID_SQL = "delete from t_account where id = ?";
     private static final String DELETE_ALL_SQL = "delete from t_account ";
@@ -34,25 +35,46 @@ public class AccountDaoImpl extends AbstractDaoImpl implements AccountDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountDaoImpl.class);
 
     private static final ThrowingFunction<ResultSet, Account, SQLException> ACCOUNT_MAPPER = rs -> {
-        Account account = new Account(rs.getLong(1));
-        account.setName(rs.getString(2));
-        account.setBalance(rs.getBigDecimal(3));
-        account.setInsertDt(rs.getDate(4).toLocalDate());
-        account.setLastUpdateTs(rs.getTimestamp(5).toLocalDateTime());
-        return account;
+        return Account.builder()
+            .setId(rs.getLong(1))
+            .setName(rs.getString(2))
+            .setBalance(rs.getBigDecimal(3))
+            .setInsertDt(rs.getDate(4).toLocalDate())
+            .setLastUpdateTs(rs.getTimestamp(5).toLocalDateTime())
+            .build();
     };
 
-//    private static final ThrowingFunction<AccountResultSet, , SQLException> ACCOUNT_UN_MAPPER = rs -> {
-//        Account account = new Account(rs.getLong(1));
-//        account.setName(rs.getString(2));
-//        account.setBalance(rs.getBigDecimal(3));
-//        account.setInsertDt(rs.getDate(4).toLocalDate());
-//        account.setLastUpdateTs(rs.getTimestamp(5).toLocalDateTime());
-//        return account;
-//    };
+    @Override
+    public Long getNextId(Connection connection) {
+        LOGGER.info("Get next id.");
+        ResultSet rs = null;
+        Statement statement = null;
+        Long id = null;
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(GET_NEXT_ID_SQL);
+            while (rs.next()) {
+                id = rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (null != rs) {
+                    rs.close();
+                }
+                if (null != statement) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return id;
+    }
 
     @Override
-    public Account getById(Connection connection,Long id) {
+    public Account getById(Connection connection, Long id) {
         LOGGER.info("Get by Id [{}]", id);
         Account account = null;
         PreparedStatement statement = null;
@@ -61,19 +83,19 @@ public class AccountDaoImpl extends AbstractDaoImpl implements AccountDao {
             statement = connection.prepareStatement(GET_BY_ID_SQL);
             statement.setLong(1, id);
             rs = statement.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 account = ACCOUNT_MAPPER.apply(rs);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            if (null != rs){
+        } finally {
+            if (null != rs) {
                 try {
                     rs.close();
                 } catch (SQLException ignored) {
                 }
             }
-            if (null != statement){
+            if (null != statement) {
                 try {
                     statement.close();
                 } catch (SQLException ignored) {
@@ -82,7 +104,6 @@ public class AccountDaoImpl extends AbstractDaoImpl implements AccountDao {
         }
         return account;
     }
-
 
     @Override
     public Collection<Account> getAll(Connection connection) {
@@ -100,33 +121,61 @@ public class AccountDaoImpl extends AbstractDaoImpl implements AccountDao {
     }
 
     @Override
-    public Account create(Connection connection,Account account) {
+    public Account create(Connection connection, Account account) {
         LOGGER.info("Persist new account [{}]", account);
+        Account persistedAccount;
         try (PreparedStatement statement = connection.prepareStatement(CREATE_SQL)) {
-            statement.setLong(1, account.getId());
-            statement.setString(2, account.getName());
-            statement.setBigDecimal(3, account.getBalance());
-            statement.setDate(4, Date.valueOf(LocalDate.now()));
-            statement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
+            Long newId = getNextId(connection);
+            LOGGER.info("New account with id [{}].", newId);
+            statement.setLong(1, newId);
+            statement.setString(1, account.getName());
+            statement.setBigDecimal(2, account.getBalance());
+            statement.setDate(3, Date.valueOf(LocalDate.now()));
+            statement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             statement.executeUpdate();
+            persistedAccount = getById(connection, newId);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return persistedAccount;
+    }
+
+    @Override
+    public Account update(Connection connection, Account account) {
+        LOGGER.info("Update account [{}]", account);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
+            preparedStatement.setString(1, account.getName());
+            preparedStatement.setBigDecimal(2, account.getBalance());
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setLong(4, account.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error("Update failure for [{}].", e.getMessage());
             throw new RuntimeException(e);
         }
         return account;
     }
 
     @Override
-    public Account update(Connection connection,Account account) {
-        return null;
-    }
-
-    @Override
-    public void deleteById(Connection connection,Long id) {
-
+    public void deleteById(Connection connection, Long id) {
+        LOGGER.info("delete account with id [{}]", id);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID_SQL)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error("Delete account failure for [{}].", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void deleteAll(Connection connection) {
-
+        LOGGER.info("delete all accounts");
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(DELETE_ALL_SQL);
+        } catch (SQLException e) {
+            LOGGER.error("Delete account failure for [{}].", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }
