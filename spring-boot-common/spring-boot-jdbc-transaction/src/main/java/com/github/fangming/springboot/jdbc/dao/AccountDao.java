@@ -2,19 +2,20 @@ package com.github.fangming.springboot.jdbc.dao;
 
 import com.github.fangming.springboot.jdbc.model.Account;
 
+import java.sql.Connection;
 import java.util.Collection;
 
 public interface AccountDao {
 
-    Account getById(Long id);
+    Account getById(Connection connection, Long id);
 
-    Collection<Account> getAll();
+    Collection<Account> getAll(Connection connection);
 
-    Account create(Account account);
+    Account create(Connection connection,Account account);
 
-    Account update(Account account);
+    Account update(Connection connection,Account account);
 
-    void deleteById(Long id);
+    void deleteById(Connection connection,Long id);
 
-    void deleteAll();
+    void deleteAll(Connection connection);
 }
