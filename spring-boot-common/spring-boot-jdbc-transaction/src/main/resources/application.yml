@@ -1,0 +1,9 @@
+### Simple Connection Pool configuration
+SimpleConnectionPool:
+  url: jdbc:oracle:thin:@localhost:1521:XE
+  driver: oracle.jdbc.driver.OracleDriver
+  user: jack
+  password: 1
+  initCount: 5
+  maxCount : 10
+###

@@ -15,6 +15,10 @@ public class Account {
     private LocalDate insertDt;
     private LocalDateTime lastUpdateTs;
 
+    public Account(Long id) {
+        this.id = id;
+    }
+
     public Account(Long id, String name, BigDecimal balance, LocalDate insertDt, LocalDateTime lastUpdateTs) {
         this.id = id;
         this.name = name;

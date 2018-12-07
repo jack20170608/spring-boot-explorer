@@ -10,6 +10,8 @@ public interface AccountDao {
 
     Collection<Account> getAll();
 
+    Account create(Account account);
+
     Account update(Account account);
 
     void deleteById(Long id);
