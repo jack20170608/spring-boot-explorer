@@ -1,6 +1,8 @@
 package com.github.fangming.springboot.jdbc.transaction.support;
 
 import com.github.fangming.springboot.jdbc.transaction.STransactionDefinition;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
@@ -25,6 +27,29 @@ public class DefaultSTransactionDefinition implements STransactionDefinition, Se
         this.timeout = timeout;
         this.readOnly = readOnly;
         this.name = name;
+    }
+
+    public void setPropagationBehavior(TransactionPropagation propagationBehavior) {
+        this.propagationBehavior = propagationBehavior;
+    }
+
+    public void setIsolationLevel(TransactionIsolationLevel isolationLevel) {
+        this.isolationLevel = isolationLevel;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public final void setTimeout(int timeout) {
+        if (timeout < TIMEOUT_DEFAULT) {
+            throw new IllegalArgumentException("Timeout must be a positive integer or TIMEOUT_DEFAULT");
+        }
+        this.timeout = timeout;
     }
 
 
@@ -52,5 +77,33 @@ public class DefaultSTransactionDefinition implements STransactionDefinition, Se
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DefaultSTransactionDefinition)) return false;
+        DefaultSTransactionDefinition that = (DefaultSTransactionDefinition) o;
+        return timeout == that.timeout &&
+            readOnly == that.readOnly &&
+            propagationBehavior == that.propagationBehavior &&
+            isolationLevel == that.isolationLevel &&
+            Objects.equal(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(propagationBehavior, isolationLevel, timeout, readOnly, name);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+            .add("propagationBehavior", propagationBehavior)
+            .add("isolationLevel", isolationLevel)
+            .add("timeout", timeout)
+            .add("readOnly", readOnly)
+            .add("name", name)
+            .toString();
     }
 }
