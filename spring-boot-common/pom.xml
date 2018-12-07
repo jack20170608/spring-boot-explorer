@@ -13,6 +13,7 @@
         <module>spring-boot-configuration-yaml</module>
         <module>spring-boot-aop-usage</module>
         <module>spring-boot-h2-usage</module>
+        <module>spring-boot-jdbc-transaction</module>
     </modules>
 
     <artifactId>spring-boot-common</artifactId>
