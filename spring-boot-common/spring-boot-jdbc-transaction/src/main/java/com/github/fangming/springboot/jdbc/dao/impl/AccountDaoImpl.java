@@ -125,15 +125,19 @@ public class AccountDaoImpl extends AbstractDaoImpl implements AccountDao {
         LOGGER.info("Persist new account [{}]", account);
         Account persistedAccount;
         try (PreparedStatement statement = connection.prepareStatement(CREATE_SQL)) {
-            Long newId = getNextId(connection);
-            LOGGER.info("New account with id [{}].", newId);
-            statement.setLong(1, newId);
-            statement.setString(1, account.getName());
-            statement.setBigDecimal(2, account.getBalance());
-            statement.setDate(3, Date.valueOf(LocalDate.now()));
-            statement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
+            Long id = account.getId();
+            if (null == id) {
+                Long newId = getNextId(connection);
+                LOGGER.info("New account with id [{}].", newId);
+                id = newId;
+            }
+            statement.setLong(1, id);
+            statement.setString(2, account.getName());
+            statement.setBigDecimal(3, account.getBalance());
+            statement.setDate(4, Date.valueOf(LocalDate.now()));
+            statement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             statement.executeUpdate();
-            persistedAccount = getById(connection, newId);
+            persistedAccount = getById(connection, id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

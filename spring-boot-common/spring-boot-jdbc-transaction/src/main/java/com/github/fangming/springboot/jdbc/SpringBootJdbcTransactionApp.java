@@ -35,6 +35,8 @@ public class SpringBootJdbcTransactionApp implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         logger.info("The default logger run successfully.");
+        accountService.deleteAll();
+
         Account sourceAccount = accountService.create(Account.builder()
             .setName("Lucy")
             .setBalance(BigDecimal.ZERO)
@@ -53,7 +55,9 @@ public class SpringBootJdbcTransactionApp implements ApplicationRunner {
 
         logger.info("Begin to do account transfer for 1000 times.");
         for(int i = 0; i < 1000; i++ ) {
-            accountService.transfer(sourceAccount, targetAccount, new BigDecimal(new Random().nextInt(10)));
+            Account source = accountService.getById(sourceAccount.getId());
+            Account target = accountService.getById(targetAccount.getId());
+            accountService.transfer(source, target, new BigDecimal(new Random().nextInt(10)));
         }
 
         logger.info("After do account transfer Account info.");

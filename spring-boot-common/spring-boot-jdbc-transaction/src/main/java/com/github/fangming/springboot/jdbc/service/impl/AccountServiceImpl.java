@@ -95,10 +95,11 @@ public class AccountServiceImpl implements AccountService {
         try {
             conn = simpleConnectionPool.getConnection();
             accountDao.deleteAll(conn);
+            conn.commit();
         }catch (Throwable throwable){
             if (null != conn) {
                 try {
-                    conn.commit();
+                    conn.rollback();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -116,12 +117,12 @@ public class AccountServiceImpl implements AccountService {
         Objects.requireNonNull(target);
         Objects.requireNonNull(amount);
 
-        logger.info("Transfer [[]] from [{}] to [{}].", amount, source, target);
+        logger.info("Transfer [{}] from [{}] to [{}].", amount, source, target);
         Connection conn = null;
         try {
             conn = simpleConnectionPool.getConnection();
-            accountDao.update(conn, Account.builder().setBalance(source.getBalance().subtract(amount)).build());
-            accountDao.update(conn, Account.builder().setBalance(target.getBalance().add(amount)).build());
+            accountDao.update(conn, Account.builder(source).setBalance(source.getBalance().subtract(amount)).build());
+            accountDao.update(conn, Account.builder(target).setBalance(target.getBalance().add(amount)).build());
             conn.commit();
         }catch (Throwable throwable){
             try {
@@ -131,6 +132,7 @@ public class AccountServiceImpl implements AccountService {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            throw new RuntimeException(throwable);
         }finally {
             if (null != conn) {
                 simpleConnectionPool.releaseConnection(conn);
