@@ -84,6 +84,8 @@ public class SpringBootJdbcTransactionApp implements ApplicationRunner {
                 accountService.transfer(source, target, new BigDecimal(new Random().nextInt(10)));
             });
         }
+        executorService.shutdown();
+        while (!executorService.awaitTermination(10, TimeUnit.SECONDS));
 
         logger.info("After do account transfer Account info.");
         accountService.getAll().forEach(account -> System.out.println(account.toString()));
