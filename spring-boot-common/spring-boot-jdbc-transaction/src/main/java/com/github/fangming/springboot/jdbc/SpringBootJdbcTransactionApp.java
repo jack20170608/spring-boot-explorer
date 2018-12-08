@@ -11,9 +11,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class SpringBootJdbcTransactionApp implements ApplicationRunner {
@@ -53,11 +58,31 @@ public class SpringBootJdbcTransactionApp implements ApplicationRunner {
         logger.info("All Account info before account transfer .");
         accountService.getAll().forEach(account -> System.out.println(account.toString()));
 
-        logger.info("Begin to do account transfer for 1000 times.");
-        for(int i = 0; i < 1000; i++ ) {
-            Account source = accountService.getById(sourceAccount.getId());
-            Account target = accountService.getById(targetAccount.getId());
-            accountService.transfer(source, target, new BigDecimal(new Random().nextInt(10)));
+        final Long sourceAccountId = sourceAccount.getId();
+        final Long targetAccountId = targetAccount.getId();
+
+//        logger.info("Begin to do account transfer for 1000 times in the main thread.");
+//        for (int i = 0; i < 1000; i++) {
+//            Account source = accountService.getById(sourceAccountId);
+//            Account target = accountService.getById(targetAccountId);
+//            accountService.transfer(source, target, new BigDecimal(new Random().nextInt(10)));
+//        }
+//        logger.info("After do account transfer Account info.");
+//        accountService.getAll().forEach(account -> System.out.println(account.toString()));
+        logger.info("------------------------------------------------------------");
+
+        ExecutorService executorService = Executors.newFixedThreadPool(20);
+        logger.info("Begin to do account transfer for 1000 times in the multiple thread.");
+        for (int i = 0; i < 1; i++) {
+            //Multiple thread execution
+            int finalI = i;
+            executorService.submit(() -> {
+                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
+                logger.info("thread:" + Thread.currentThread().getName() + ",time:" + format.format(new Date()) + ",num:" + finalI);
+                Account source = accountService.getById(sourceAccountId);
+                Account target = accountService.getById(targetAccountId);
+                accountService.transfer(source, target, new BigDecimal(new Random().nextInt(10)));
+            });
         }
 
         logger.info("After do account transfer Account info.");

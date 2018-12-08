@@ -9,7 +9,7 @@ public class SimpleSTransactionStatus extends AbstractSTransactionStatus {
      * Creates a new instance of the {@link SimpleSTransactionStatus} class,
 	 * indicating a new transaction.
 	 */
-	public SimpleTransactionStatus() {
+	public SimpleSTransactionStatus() {
 		this(true);
 	}
 

@@ -7,9 +7,9 @@ SimpleConnectionPool:
   initCount: 5
   maxCount : 10
 ### Blocking connection Pool configuration
-blockingPool:
-  driverClass: oracle.jdbc.driver.OracleDriver
+blocking-pool:
   url: jdbc:oracle:thin:@localhost:1521:XE
+  driver: oracle.jdbc.driver.OracleDriver
   user: jack
   password: 1
   size: 10

@@ -11,27 +11,18 @@ import java.sql.Connection;
 @Component("blockingPool")
 public class JdbcBoundedBlockingPoolBeanFactory implements FactoryBean<Pool<Connection>> {
 
-    @Value("${blockingPool.size}")
+    @Value("${blocking-pool.size}")
     private int poolSize;
 
-    @Value("$(blockingPool.driverClass)")
-    private String driverClass;
-
-    @Value("${blockingPool.url}")
-    private String url;
-
-    @Value("${blockingPool.user}")
-    private String userName;
-
-    @Value("${blockingPool.password}")
-    private String password;
+    @Autowired
+    private JDBCConnectionFactory jdbcConnectionFactory;
 
     @Override
     public Pool<Connection> getObject() throws Exception {
         return new BoundedBlockingPool<>(
             this.poolSize ,
             new JDBCConnectionValidator(),
-            new JDBCConnectionFactory(this.driverClass, this.url, userName, password)
+            jdbcConnectionFactory
         );
     }
 
