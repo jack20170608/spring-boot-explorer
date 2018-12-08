@@ -1,5 +1,6 @@
-package com.github.fangming.springboot.jdbc.pool;
+package com.github.fangming.springboot.jdbc.pool.impl;
 
+import com.github.fangming.springboot.jdbc.pool.SimpleConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
-public class MySimpleConnectionPool implements SimpleConnectionPool{
+public class MySimpleConnectionPool implements SimpleConnectionPool {
 
     private final String jdbcDriver ;
     private final String url ;
