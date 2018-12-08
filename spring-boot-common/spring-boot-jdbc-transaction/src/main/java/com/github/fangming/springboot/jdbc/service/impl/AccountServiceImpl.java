@@ -2,18 +2,19 @@ package com.github.fangming.springboot.jdbc.service.impl;
 
 import com.github.fangming.springboot.jdbc.dao.AccountDao;
 import com.github.fangming.springboot.jdbc.model.Account;
+import com.github.fangming.springboot.jdbc.pool.Pool;
 import com.github.fangming.springboot.jdbc.pool.SimpleConnectionPool;
 import com.github.fangming.springboot.jdbc.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -21,13 +22,12 @@ public class AccountServiceImpl implements AccountService {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
     private final AccountDao accountDao;
-    private final SimpleConnectionPool simpleConnectionPool;
-
+    private final Pool<Connection> connectionPool;
 
     @Autowired
-    public AccountServiceImpl(final AccountDao accountDao, SimpleConnectionPool simpleConnectionPool) {
+    public AccountServiceImpl(final AccountDao accountDao, final @Qualifier("blockingPool") Pool<Connection> connectionPool) {
         this.accountDao = accountDao;
-        this.simpleConnectionPool = simpleConnectionPool;
+        this.connectionPool = connectionPool;
     }
 
 
@@ -36,13 +36,13 @@ public class AccountServiceImpl implements AccountService {
         Connection conn = null;
         Collection<Account> accounts;
         try {
-            conn = simpleConnectionPool.getConnection();
+            conn = connectionPool.get();
             accounts = accountDao.getAll(conn);
         }catch (Throwable throwable){
             throw new RuntimeException(throwable);
         }finally {
             if (null != conn) {
-                simpleConnectionPool.releaseConnection(conn);
+                connectionPool.release(conn);
             }
         }
         return accounts;
@@ -53,13 +53,13 @@ public class AccountServiceImpl implements AccountService {
         Connection conn = null;
         Account account;
         try {
-            conn = simpleConnectionPool.getConnection();
+            conn = connectionPool.get();
             account = accountDao.getById(conn, id);
         }catch (Throwable throwable){
             throw new RuntimeException(throwable);
         }finally {
             if (null != conn) {
-                simpleConnectionPool.releaseConnection(conn);
+                connectionPool.release(conn);
             }
         }
         return account;
@@ -70,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
         Connection conn = null;
         Account persistedAccount = null;
         try {
-            conn = simpleConnectionPool.getConnection();
+            conn = connectionPool.get();
             persistedAccount = accountDao.create(conn, account);
             conn.commit();
         }catch (Throwable throwable){
@@ -83,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
             }
         }finally {
             if (null != conn) {
-                simpleConnectionPool.releaseConnection(conn);
+                connectionPool.release(conn);
             }
         }
         return persistedAccount;
@@ -93,7 +93,7 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAll() {
         Connection conn = null;
         try {
-            conn = simpleConnectionPool.getConnection();
+            conn = connectionPool.get();
             accountDao.deleteAll(conn);
             conn.commit();
         }catch (Throwable throwable){
@@ -106,7 +106,7 @@ public class AccountServiceImpl implements AccountService {
             }
         }finally {
             if (null != conn) {
-                simpleConnectionPool.releaseConnection(conn);
+                connectionPool.release(conn);
             }
         }
     }
@@ -120,7 +120,7 @@ public class AccountServiceImpl implements AccountService {
         logger.info("Transfer [{}] from [{}] to [{}].", amount, source, target);
         Connection conn = null;
         try {
-            conn = simpleConnectionPool.getConnection();
+            conn = connectionPool.get();
             accountDao.update(conn, Account.builder(source).setBalance(source.getBalance().subtract(amount)).build());
             accountDao.update(conn, Account.builder(target).setBalance(target.getBalance().add(amount)).build());
             conn.commit();
@@ -135,7 +135,7 @@ public class AccountServiceImpl implements AccountService {
             throw new RuntimeException(throwable);
         }finally {
             if (null != conn) {
-                simpleConnectionPool.releaseConnection(conn);
+                connectionPool.release(conn);
             }
         }
     }

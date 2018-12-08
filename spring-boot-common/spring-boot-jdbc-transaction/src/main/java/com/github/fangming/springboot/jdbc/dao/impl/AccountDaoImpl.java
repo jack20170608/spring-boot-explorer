@@ -4,11 +4,12 @@ import com.github.fangming.springboot.ThrowingFunction;
 import com.github.fangming.springboot.jdbc.dao.AbstractDaoImpl;
 import com.github.fangming.springboot.jdbc.dao.AccountDao;
 import com.github.fangming.springboot.jdbc.model.Account;
-import com.github.fangming.springboot.jdbc.pool.SimpleConnectionPool;
+import com.github.fangming.springboot.jdbc.pool.Pool;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -20,8 +21,8 @@ import java.util.Collection;
 public class AccountDaoImpl extends AbstractDaoImpl implements AccountDao {
 
     @Autowired
-    public AccountDaoImpl(SimpleConnectionPool simpleConnectionPool) {
-        super(simpleConnectionPool);
+    public AccountDaoImpl(final @Qualifier("blockingPool") Pool<Connection> pool) {
+        super(pool);
     }
 
     private static final String GET_BY_ID_SQL = "select * from t_account where id = ?";

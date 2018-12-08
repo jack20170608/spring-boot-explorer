@@ -1,6 +1,6 @@
 package com.github.fangming.springboot.jdbc.pool.impl;
 
-import com.github.fangming.springboot.jdbc.pool.SimpleConnectionPool;
+import com.github.fangming.springboot.jdbc.pool.Pool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Component
-public class MySimpleConnectionPool implements SimpleConnectionPool {
+@Component("simplePool")
+public class MySimpleConnectionPoolImpl implements Pool<Connection> {
 
     private final String jdbcDriver ;
     private final String url ;
@@ -27,15 +27,15 @@ public class MySimpleConnectionPool implements SimpleConnectionPool {
     private AtomicInteger currentCount = new AtomicInteger(0);
     private LinkedList<Connection> connectionsPool = new LinkedList<>();
 
-    private static final Logger logger = LoggerFactory.getLogger(MySimpleConnectionPool.class);
+    private static final Logger logger = LoggerFactory.getLogger(MySimpleConnectionPoolImpl.class);
 
     @Autowired
-    public MySimpleConnectionPool(@Value("${SimpleConnectionPool.driver}") String jdbcDriver
-        ,@Value("${SimpleConnectionPool.url}") String url
+    public MySimpleConnectionPoolImpl(@Value("${SimpleConnectionPool.driver}") String jdbcDriver
+        , @Value("${SimpleConnectionPool.url}") String url
         , @Value("${SimpleConnectionPool.user}") String userName
-        ,@Value("${SimpleConnectionPool.password}") String password
+        , @Value("${SimpleConnectionPool.password}") String password
         , @Value("${SimpleConnectionPool.initCount}")int initCount
-        ,@Value("${SimpleConnectionPool.maxCount}") int maxCount) {
+        , @Value("${SimpleConnectionPool.maxCount}") int maxCount) {
         this.jdbcDriver = jdbcDriver;
         this.url = url;
         this.userName = userName;
@@ -44,7 +44,7 @@ public class MySimpleConnectionPool implements SimpleConnectionPool {
         this.maxCount = maxCount;
 
         try {
-            Class.forName(jdbcDriver);
+            Class.forName(this.jdbcDriver);
         } catch (ClassNotFoundException e) {
             logger.error("Driver class not found.");
             throw new RuntimeException(e);
@@ -72,7 +72,7 @@ public class MySimpleConnectionPool implements SimpleConnectionPool {
     }
 
     @Override
-    public Connection getConnection() {
+    public Connection get() {
         synchronized (connectionsPool) {
             if (this.connectionsPool.size() > 0)
                 return this.connectionsPool.removeFirst();
@@ -87,9 +87,14 @@ public class MySimpleConnectionPool implements SimpleConnectionPool {
     }
 
     @Override
-    public void releaseConnection(Connection conn) {
+    public void release(Connection conn) {
         this.connectionsPool.addLast(conn);
     }
+
+    @Override
+    public void shutdown() {
+    }
+
 
 }
 	

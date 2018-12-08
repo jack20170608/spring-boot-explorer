@@ -1,19 +1,19 @@
 package com.github.fangming.springboot.jdbc.dao;
 
-import com.github.fangming.springboot.jdbc.pool.SimpleConnectionPool;
+import com.github.fangming.springboot.jdbc.pool.Pool;
+
+import java.sql.Connection;
 
 
 public abstract class AbstractDaoImpl {
 
-    private final SimpleConnectionPool simpleConnectionPool;
+    private final Pool<Connection> pool;
 
-    public SimpleConnectionPool getSimpleConnectionPool() {
-        return simpleConnectionPool;
+    public Pool<Connection> getPool() {
+        return pool;
     }
 
-    public AbstractDaoImpl(SimpleConnectionPool simpleConnectionPool) {
-        this.simpleConnectionPool = simpleConnectionPool;
+    public AbstractDaoImpl(Pool<Connection> pool) {
+        this.pool = pool;
     }
-
-
 }
