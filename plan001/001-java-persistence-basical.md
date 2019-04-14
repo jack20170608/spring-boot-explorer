@@ -30,3 +30,6 @@
 
 参考资料：
 Java并发编程实战 
+
+
+This is a dummy testing message from Docker 110 server.
