@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>G1 test case builder</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link href="https://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet"/>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Please combine the testing condition to build your test case</div>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <!-- G1 Account  -->
+                    <div class="form-group">
+                        <label for="g1Account" class="col-sm-2 control-label">G1 Account</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="g1Account">
+                                <option value="HBAP">HBAP</option>
+                                <option selected="selected">HBEU</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr/>
+                    <!-- Counter Party -->
+                    <div class="form-group">
+                        <label for="cpt1" class="col-sm-2 control-label">CounterParty</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" checked="checked" name="counterParty" id="cpt1" value="cpt1"/>
+                                HSBC
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="counterParty" id="cpt2" value="cpt2"/>
+                                PLASP
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="counterParty" id="cpt3" value="cpt3"/>
+                                BLACK
+                            </label>
+                        </div>
+                    </div>
+                    <hr/>
+                    <!-- Trade Type -->
+                    <div class="form-group">
+                        <label for="sbl1" class="col-sm-2 control-label">TradeType</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" checked="checked" name="tradeType" id="sbl1" value="sbl"/>
+                                Stock Borrow and Lending
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="tradeType" id="sbl2" value="sbl2"/>
+                                Collateral
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="tradeType" id="sbl3" value="sbl3"/>
+                                Collateral and Swap
+                            </label>
+                        </div>
+                    </div>
+                    <hr/>
+                    <!-- Activity Type -->
+                    <div class="form-group">
+                        <label for="sbl1" class="col-sm-2 control-label">ActivityType</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" checked="checked" name="activityType" id="act1" value="act1"/>
+                                Pending Lend
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="activityType" id="act2" value="act2"/>
+                                Settlement
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="activityType" id="act3" value="act3"/>
+                                Cancel Trade
+                            </label>
+                        </div>
+                    </div>
+                    <hr/>
+                    <!-- Other -->
+                    <div class="form-group">
+                        <label for="sbl1" class="col-sm-2 control-label">Other</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" checked="checked" name="other" id="other1" value="act1"/>
+                                Pending Lend
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="other" id="other2" value="other2"/>
+                                Settlement
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="other" id="other3" value="other3"/>
+                                Cancel Trade
+                            </label>
+                        </div>
+                    </div>
+                    <hr/>
+                    <!-- commit -->
+                    <div class="form-group">
+
+                        <div>
+                            <button type="button" class="btn btn-success" id="showCode">Generate</button>
+                            <button type="reset" class="btn btn-success">Reset</button>
+                        </div>
+
+
+                    </div>
+
+                </form>
+            </div>
+
+        </div> <!-- end of col-md-6-->
+        <div class="col-md-6">
+            <div class="panel panel-info">
+
+                <div class="panel-body">
+                    <form role="form" id="testCaseForm">
+                        <div class="form-group ">
+                            <label for="codeBox" class="control-label">TestScripts</label>
+                            <div>
+                                <textarea class="form-control" name="codeBox" id="codeBox" rows="20"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="testCaseName" class="control-label">TestCaseName</label>
+                            <div>
+                                <input type="text" class="form-control" id="testCaseName" name="testCaseName"
+                                       placeholder="Please input the test case name"/>
+                            </div>
+                        </div>
+                        <!-- commit -->
+                        <div class="form-group">
+                            <div>
+                                <button type="button" class="btn btn-success" id="submitTestCase">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> <!-- end of col-md-6 -->
+    </div> <!-- end of row -->
+</div> <!-- end of app -->
+
+<script>
+
+    String.format = function (str) {
+        var args = arguments, re = new RegExp("%([1-" + args.length + "])", "g");
+        return String(str).replace(
+            re,
+            function ($1, $2) {
+                return args[$2];
+            }
+        );
+    };
+
+    var testScriptsTemplate = "I'm choose G1 account [%1], Counter Party is [%2], " +
+        " Trade Type is [%3], Activity Type is [%4], Other is [%5]";
+    var testScript = String.format(testScriptsTemplate, 'HSBC', 'AED006', 'SBL', 'PL', '123');
+    console.log(testScript);
+
+    $(function () {
+        $("#showCode").click(function () {
+            var g1Account = $('select#g1Account option:selected').val();
+            var counterParty = $("input[name='counterParty']:checked").val();
+            var tradeType = $("input[name='tradeType']:checked").val();
+            var activityType = $("input[name='activityType']:checked").val();
+            var other = $("input[name='other']:checked").val();
+            var code = String.format(testScriptsTemplate, g1Account, counterParty, tradeType, activityType, other);
+            $("#codeBox").val(code);
+
+        });
+
+        function G1TestCaseEntity(testCaseName, codeBox){
+            this.testCaseName = testCaseName;
+            this.codeBox = codeBox;
+        }
+
+
+        $("#submitTestCase").click(function () {
+            console.log("post the test cases to the server....");
+            var postData = new G1TestCaseEntity( $("#testCaseName").val(), $("#codeBox").val());
+            console.log(postData);
+            $.ajax({
+                type: "POST",
+                url: "g1/send",
+                data: JSON.stringify(postData),
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                beforeSend: function () {
+                    console.log("collection data");
+                },
+                success: function (data) {
+                    alert('test case upload success');
+                },
+                error: function () {
+                    alert('test case upload failure');
+                }
+            });
+
+        });
+        //form validator
+        $('#testCaseForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                testCaseName: {
+                    message: 'Test case name should not be null ',
+                    validators: {
+                        notEmpty: {
+                            message: 'Test case name should not null'
+                        }
+                    }
+                },
+                codeBox: {
+                    message: 'Test case scripts should not be null ',
+                    validators: {
+                        notEmpty: {
+                            message: 'Test case scripts should be not null'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
